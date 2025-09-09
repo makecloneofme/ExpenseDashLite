@@ -2,35 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Premium Expense Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Embedded CSS for a modern, premium look -->
   <style>
     :root {
-      --bg-color: #111827;
-      --surface-color: #1f2937;
-      --primary-color: #38bdf8;
-      --primary-hover: #7dd3fc;
-      --text-primary: #f9fafb;
-      --text-secondary: #9ca3af;
-      --border-color: #374151;
-      --shadow-color: rgba(0, 0, 0, 0.25);
+      --bg: #0b1020;                       /* page background */
+      --bg-accent: radial-gradient(1200px 600px at 20% -10%, rgba(59,130,246,.12), transparent 60%),
+                   radial-gradient(900px 500px at 110% 10%, rgba(168,85,247,.10), transparent 60%),
+                   linear-gradient(180deg, #0b1020 0%, #0d1326 60%, #0b1020 100%);
+      --surface: rgba(17, 24, 39, .55);    /* glass card */
+      --surface-2: rgba(31, 41, 55, .6);
+      --text: #f9fafb;                     /* primary text */
+      --muted: #a2adc2;                    /* secondary text */
+      --border: rgba(255,255,255,.10);
+      --primary: #60a5fa;                  /* blue */
+      --primary-strong: #3b82f6;
+      --accent: #a78bfa;                   /* violet */
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 16px;
+      --blur: 16px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg-accent);
+      background-color: var(--bg);
       padding: 2rem;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -44,430 +50,152 @@
       gap: 2rem;
     }
 
+    /* ---------- Header ---------- */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
-
     header h1 {
-      font-size: 2rem;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      letter-spacing: 0.2px;
+      line-height: 1.1;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
     }
+    .header-right { display: flex; align-items: center; gap: .75rem; }
+    #clock { color: var(--muted); font-weight: 600; font-size: .95rem; }
+    #logout-btn { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
-    #clock {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
+    /* ---------- Cards / Glass ---------- */
     .card {
-      background-color: var(--surface-color);
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px var(--shadow-color);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px var(--shadow-color);
-    }
-
-    .summary-card {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .summary-card .icon {
-      font-size: 1.5rem;
-    }
-
-    .summary-card .title {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .summary-card .value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .main-content {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 1.5rem;
-      align-items: flex-start;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
-    }
-
-    .form-container form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .form-group label {
-      font-weight: 500;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-
-    input,
-    select,
-    button {
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      padding: 0.75rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background-color: #374151;
-      color: var(--text-primary);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3);
-    }
-
-    input:disabled {
-      background-color: #2b3544;
-      cursor: not-allowed;
-    }
-
-    button {
-      background-color: var(--primary-color);
-      color: var(--bg-color);
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    button:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .controls-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      min-width: 0;
-    }
-
-    #history-title {
-      margin-bottom: 0;
-      white-space: nowrap;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)) , var(--surface);
+      backdrop-filter: saturate(1.2) blur(var(--blur));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      position: relative;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
-
-    #back-btn {
-      background-color: var(--surface-color);
-      color: var(--text-primary);
-      padding: 0.5rem 0.75rem;
-      font-weight: 500;
-      border: 1px solid var(--border-color);
-      flex-shrink: 0;
-    }
-
-    #back-btn.hidden {
-      display: none;
-    }
-
-    .controls {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .controls input,
-    .controls select {
-      background-color: var(--surface-color);
-    }
-
-    #sort-order-btn {
-      background-color: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    #sort-order-btn:hover {
-      background-color: var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    .transaction-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .transaction-table th,
-    .transaction-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .transaction-table th {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .transaction-table tbody tr {
-      transition: background-color 0.2s ease;
-    }
-
-    .transaction-table tbody tr:hover {
-      background-color: #374151;
-    }
-
-    .clickable-name {
-      cursor: pointer;
-      font-weight: 500;
-      color: var(--primary-hover);
-      transition: color 0.2s ease;
-    }
-    .clickable-name:hover {
-      text-decoration: underline;
-      color: var(--primary-color);
-    }
-
-    .transaction-table .empty-row td {
-      text-align: center;
-      padding: 3rem;
-      color: var(--text-secondary);
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .new-row {
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .main-content {
-        grid-template-columns: 1fr;
-      }
-    }
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.5rem;
-      }
-      .summary-cards {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      }
-      .transaction-table th,
-      .transaction-table td {
-        padding: 0.75rem;
-        font-size: 0.9rem;
-      }
-      input,
-      select,
-      button {
-        font-size: 0.9rem;
-        padding: 0.6rem;
-      }
-    }
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-      }
-      .controls-header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .controls {
-        flex-direction: column;
-      }
-      .summary-cards {
-        grid-template-columns: 1fr;
-      }
-    }
-    @media (max-width: 480px) {
-      h2 {
-        font-size: 1.1rem;
-      }
-      #clock {
-        font-size: 0.85rem;
-      }
-    }
-
-    /* Transform table into stacked cards for very small screens */
-    @media (max-width: 400px) {
-      .transaction-table,
-      .transaction-table thead,
-      .transaction-table tbody,
-      .transaction-table th,
-      .transaction-table td,
-      .transaction-table tr {
-        display: block;
-        width: 100%;
-      }
-
-      .transaction-table thead {
-        display: none;
-      }
-
-      .transaction-table tr {
-        margin-bottom: 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        background-color: var(--surface-color);
-        padding: 0.75rem;
-      }
-
-      .transaction-table td {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.5rem 0;
-        border: none;
-        font-size: 0.85rem;
-      }
-
-      .transaction-table td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: var(--text-secondary);
-      }
-    }
-
-    /* --- Login Page Styles --- */
-    #auth-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-
-    #auth-card {
-      width: 100%;
-      max-width: 400px;
-      padding: 2rem;
-    }
-
-    #auth-card h2 {
-      margin-bottom: 1rem;
-    }
-
-    #auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: var(--text-secondary);
-      margin: 1.5rem 0;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .divider:not(:empty)::before {
-      margin-right: 0.5em;
-    }
-
-    .divider:not(:empty)::after {
-      margin-left: 0.5em;
-    }
-
-    #google-signin-btn {
-      background-color: transparent;
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    #google-signin-btn:hover {
-      background-color: var(--border-color);
-    }
-
-    .google-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    #watermark {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      color: rgba(255, 255, 255, 0.15);
-      font-size: 0.75rem;
+    .card::after { /* subtle gradient edge */
+      content: "";
+      position: absolute; inset: -1px;
+      border-radius: inherit;
       pointer-events: none;
-      z-index: 1000;
+      background: linear-gradient(120deg, rgba(96,165,250,.25), rgba(167,139,250,.18) 40%, transparent 70%);
+      mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      padding: 1px; 
+    }
+
+    /* ---------- Summary cards ---------- */
+    .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .summary-card { display: grid; gap: .4rem; align-content: start; }
+    .summary-card .icon { font-size: 1.5rem; }
+    .summary-card .title { color: var(--muted); font-weight: 600; font-size: .85rem; }
+    .summary-card .value { font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 800; }
+
+    /* ---------- Main grid ---------- */
+    .main-content { display: grid; grid-template-columns: 360px 1fr; gap: 1.25rem; align-items: start; }
+
+    h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: .2px; margin-bottom: 1rem; }
+
+    /* ---------- Form ---------- */
+    .form-container form { display: grid; gap: .9rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+
+    .form-group { display: grid; gap: .45rem; }
+    .form-group label { color: var(--muted); font-weight: 600; font-size: .85rem; }
+    input, select, button {
+      font: inherit; font-weight: 600;
+      padding: .8rem .9rem; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(30, 41, 59, .55);
+      color: var(--text);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .08s ease;
+    }
+    input::placeholder { color: #96a0b8; opacity: .9; font-weight: 500; }
+    input:focus, select:focus {
+      outline: none; border-color: rgba(96,165,250,.55);
+      box-shadow: 0 0 0 4px rgba(96,165,250,.22);
+    }
+    button { background: linear-gradient(135deg, var(--primary-strong), var(--accent)); color: white; border: none; }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); filter: brightness(.98); }
+
+    #back-btn { background: transparent; color: var(--text); border: 1px solid var(--border); padding: .5rem .7rem; }
+    #back-btn.hidden { display: none; }
+
+    /* ---------- Controls ---------- */
+    .controls-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .header-title { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+    #history-title { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .controls { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .controls input, .controls select { background: rgba(17,24,39,.55); }
+
+    #sort-order-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    #sort-order-btn:hover { background: rgba(255,255,255,.04); color: var(--text); }
+
+    /* ---------- Table ---------- */
+    .table-wrapper { overflow-x: auto; }
+    .transaction-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .transaction-table thead th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 700; padding: .9rem 1rem; background: transparent; position: sticky; top: 0; backdrop-filter: blur(8px); }
+    .transaction-table tbody tr { transition: background-color .15s ease, transform .08s ease; }
+    .transaction-table td { padding: 1rem; border-top: 1px solid var(--border); }
+    .transaction-table tbody tr:nth-child(odd) { background: rgba(255,255,255,.02); }
+    .transaction-table tbody tr:hover { background: rgba(96,165,250,.12); }
+
+    .clickable-name { cursor: pointer; font-weight: 700; color: #c3d9ff; }
+    .clickable-name:hover { color: #e2ecff; text-decoration: underline; }
+
+    .transaction-table .empty-row td { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .new-row { animation: fadeInUp .4s ease both; }
+
+    /* ---------- Auth ---------- */
+    #auth-container { min-height: 100vh; display: grid; place-items: center; text-align: left; }
+    #auth-card { width: 100%; max-width: 420px; }
+    #auth-card h2 { margin-bottom: .75rem; }
+    #auth-notice { color: var(--muted); font-size: .8rem; }
+
+    .divider { display: flex; align-items: center; gap: .75rem; color: var(--muted); margin: 1rem 0; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+    #google-signin-btn { background: rgba(255,255,255,.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: .65rem; }
+    #google-signin-btn:hover { background: rgba(255,255,255,.08); }
+
+    /* ---------- Watermark ---------- */
+    #watermark { position: fixed; bottom: .8rem; right: .9rem; color: rgba(255,255,255,.18); font-size: .75rem; letter-spacing: .08em; pointer-events: none; z-index: 1000; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 980px) { .main-content { grid-template-columns: 1fr; } }
+
+    @media (max-width: 720px) {
+      body { padding: 1.25rem; }
+      .summary-cards { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+      .form-row { grid-template-columns: 1fr; }
+      .transaction-table thead th { font-size: .72rem; }
+    }
+
+    /* Stacked card view for very small phones */
+    @media (max-width: 440px) {
+      .controls { flex-direction: column; width: 100%; }
+      .transaction-table, .transaction-table thead, .transaction-table tbody, .transaction-table th, .transaction-table td, .transaction-table tr { display: block; width: 100%; }
+      .transaction-table thead { display: none; }
+      .transaction-table tbody tr { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: .75rem .9rem; margin-bottom: .9rem; }
+      .transaction-table td { display: flex; justify-content: space-between; align-items: center; border: none; padding: .5rem 0; }
+      .transaction-table td::before { content: attr(data-label); color: var(--muted); font-weight: 700; margin-right: 1rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Authentication UI -->
+  <!-- Auth -->
   <div id="auth-container">
     <div id="auth-card" class="card">
       <h2 id="auth-title">Log in to your Dashboard</h2>
@@ -482,10 +210,10 @@
         </div>
         <button type="submit" id="auth-submit-btn">Log In</button>
       </form>
-      <div id="auth-error" style="color: #f87171; text-align: center; margin-bottom: 1rem;"></div>
+      <div id="auth-error" style="color:#fca5a5; text-align:center; margin:.75rem 0 .25rem;"></div>
       <div class="divider">or</div>
       <button id="google-signin-btn" type="button" aria-label="Sign in with Google">
-        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24" aria-hidden="true">
+        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
           <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
           <path fill="#FF3D00" d="M6.306 14.691L4 17.696C4.681 19.045 5.541 20.301 6.471 21.492c1.236 1.543 2.658 2.872 4.09 4.108l2.67-2.67c-1.391-1.161-2.483-2.585-3.328-4.108z"/>
           <path fill="#4CAF50" d="M14.001 20l1.55 1.496l1.248 1.53l3.078 3.076l-1.666 1.666c-.663.664-1.442 1.233-2.316 1.76l-2.072-2.071c-.754-.753-1.636-1.378-2.613-1.879l-1.55 1.496c-.461 1.455-.733 2.993-.733 4.582c0 3.018.98 5.867 2.709 8.16l2.164-2.165c-1.375-1.921-2.203-4.223-2.203-6.687c0-1.842.368-3.59.988-5.186z"/>
@@ -493,23 +221,21 @@
         </svg>
         Sign in with Google
       </button>
-      <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+      <p style="margin-top: 1rem; color: var(--muted); font-size: .85rem;">
         <span id="auth-link-text">Don't have an account?</span>
-        <button id="auth-link" type="button" style="color: var(--primary-hover); text-decoration: underline; background: none; border: none; padding: 0; font-size: 0.875rem;">Sign Up</button>
+        <button id="auth-link" type="button" style="color: #c3d9ff; text-decoration: underline; background: none; border: none; padding: 0; font-size: .85rem;">Sign Up</button>
       </p>
-      <p id="auth-notice" style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.75rem;">
-        Your data is stored privately in a secure Firestore database.
-      </p>
+      <p id="auth-notice">Your data is stored privately in a secure Firestore database.</p>
     </div>
   </div>
 
-  <!-- Main Dashboard UI (Initially hidden) -->
-  <div id="dashboard-container" class="container" style="display: none;">
+  <!-- Dashboard -->
+  <div id="dashboard-container" class="container" style="display:none;">
     <header>
       <h1>Expense Dashboard</h1>
-      <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="header-right">
         <div id="clock"></div>
-        <button id="logout-btn" style="background-color: #ef4444; color: white;">Log out</button>
+        <button id="logout-btn">Log out</button>
       </div>
     </header>
 
@@ -532,28 +258,28 @@
     </section>
 
     <main class="main-content">
+      <!-- Add form -->
       <section id="form-card" class="card form-container">
         <h2>Add Transaction</h2>
         <form id="add-form" autocomplete="off">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" placeholder="e.g., Dinner, Transport" required />
+            <input type="text" id="name" placeholder="e.g., Dinner with friends" required />
           </div>
-          <div class="form-group">
-            <label for="amount">Amount (₹)</label>
-            <input type="number" id="amount" placeholder="e.g., 500" required />
-          </div>
-          <div class="form-group">
-            <label for="type">Type</label>
-            <select id="type" required>
-              <option value="">Select</option>
-              <option value="Food">Food</option>
-              <option value="Transport">Transport</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Utilities">Utilities</option>
-              <option value="Other">Other</option>
-            </select>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="amount">Amount (₹)</label>
+              <input type="number" id="amount" placeholder="e.g., 1500" min="0" step="0.01" required />
+            </div>
+            <div class="form-group">
+              <label for="type">Transaction Type</label>
+              <select id="type">
+                <option value="GPay">GPay</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label for="date">Date</label>
@@ -563,24 +289,27 @@
         </form>
       </section>
 
-      <section id="table-card" class="card">
+      <!-- History -->
+      <section id="history-card" class="card">
         <div class="controls-header">
           <div class="header-title">
-            <button id="back-btn" class="hidden">⬅</button>
-            <h2 id="history-title">Transaction History</h2>
+            <button id="back-btn" class="hidden" type="button">← Back</button>
+            <h2 id="history-title">History</h2>
           </div>
           <div class="controls">
-            <input type="text" id="search" placeholder="Search..." />
-            <select id="filter-type">
-              <option value="all">All Types</option>
-              <option value="Food">Food</option>
-              <option value="Transport">Transport</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Utilities">Utilities</option>
-              <option value="Other">Other</option>
+            <select id="filter-by">
+              <option value="name">Filter by Name</option>
+              <option value="amount">Filter by Amount</option>
+              <option value="type">Filter by Type</option>
+              <option value="date">Filter by Date</option>
             </select>
-            <button id="sort-order-btn">⬆ Date</button>
+            <input type="text" id="filter-name" placeholder="Search by name..." />
+            <select id="sort-by">
+              <option value="date">Sort by Date</option>
+              <option value="amount">Sort by Amount</option>
+              <option value="name">Sort by Name</option>
+            </select>
+            <button id="sort-order-btn" type="button">Desc ⬇️</button>
           </div>
         </div>
         <div class="table-wrapper">
@@ -594,286 +323,348 @@
               </tr>
             </thead>
             <tbody id="transaction-list">
-              <tr class="empty-row"><td colspan="4">No transactions yet</td></tr>
+              <tr>
+                <td colspan="4" style="text-align:center; color: var(--muted); padding: 2rem;">Loading transactions...</td>
+              </tr>
             </tbody>
           </table>
         </div>
+        <p id="user-id-display" style="font-size:.75rem; color:var(--muted); margin-top:.75rem; text-align:right;"></p>
       </section>
     </main>
   </div>
 
-  <div id="watermark">Team Incognito</div>
+  <!-- Watermark -->
+  <div id="watermark">Developed by xGHOST</div>
 
-  <!-- Firebase App (modular SDK) -->
+  <!-- Firebase + App code -->
   <script type="module">
-    // Firebase v9+ Modular SDK imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    // --- Firebase SDK (modular v11) ---
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
     import {
       getAuth,
-      onAuthStateChanged,
-      signOut,
-      createUserWithEmailAndPassword,
+      setPersistence,
+      browserLocalPersistence,
       signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
       GoogleAuthProvider,
       signInWithPopup,
-    } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+      onAuthStateChanged,
+      signOut,
+    } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+
     import {
       getFirestore,
       collection,
       addDoc,
+      onSnapshot,
       query,
       orderBy,
-      onSnapshot,
-      serverTimestamp,
-      doc,
-      getDoc,
-      updateDoc,
-    } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+    } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
-    // Your Firebase config (replace with your values)
+    // --- Your Firebase Config (from your original app) ---
     const firebaseConfig = {
-      apiKey: "AIzaSyCYS-MvlFVrfcRFL5JFa2dADklwrj1cCbM",
-      authDomain: "xpensedashboard.firebaseapp.com",
-      projectId: "xpensedashboard",
-      storageBucket: "xpensedashboard.firebasestorage.app",
-      messagingSenderId: "709303269161",
-      appId: "1:709303269161:web:6c6bf60d99a0482de12938"
+      apiKey: 'AIzaSyCYS-MvlFVrfcRFL5JFa2dADklwrj1cCbM',
+      authDomain: 'xpensedashboard.firebaseapp.com',
+      projectId: 'xpensedashboard',
+      storageBucket: 'xpensedashboard.firebasestorage.app',
+      messagingSenderId: '709303269161',
+      appId: '1:709303269161:web:6c6bf60d99a0482de12938',
     };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+    // Initialize Firebase (guard against double init)
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Auth elements
-    const authContainer = document.getElementById("auth-container");
-    const dashboardContainer = document.getElementById("dashboard-container");
-    const authForm = document.getElementById("auth-form");
-    const authTitle = document.getElementById("auth-title");
-    const authSubmitBtn = document.getElementById("auth-submit-btn");
-    const authLink = document.getElementById("auth-link");
-    const authLinkText = document.getElementById("auth-link-text");
-    const authError = document.getElementById("auth-error");
-    const googleSigninBtn = document.getElementById("google-signin-btn");
-    const logoutBtn = document.getElementById("logout-btn");
+    // Persist login in this browser
+    try { await setPersistence(auth, browserLocalPersistence); } catch (e) { console.warn('Could not set persistence:', e?.message || e); }
 
-    let isLoginMode = true;
+    // --- State ---
+    let userId = null;
+    let allTransactions = [];
+    let isSignUpMode = false;
 
-    // Toggle login/signup
-    authLink.addEventListener("click", () => {
-      isLoginMode = !isLoginMode;
-      authTitle.textContent = isLoginMode ? "Log in to your Dashboard" : "Sign up for your Dashboard";
-      authSubmitBtn.textContent = isLoginMode ? "Log In" : "Sign Up";
-      authLinkText.textContent = isLoginMode ? "Don't have an account?" : "Already have an account?";
-      authLink.textContent = isLoginMode ? "Sign Up" : "Log In";
-      authError.textContent = "";
-    });
+    // Prefer real appId from Firebase app when available
+    const appId = (app?.options?.appId) || 'default-app-id';
 
-    // Email/password auth
-    authForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("auth-email").value;
-      const password = document.getElementById("auth-password").value;
-      try {
-        if (isLoginMode) {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, password);
-        }
-      } catch (error) {
-        authError.textContent = error.message;
+    // --- DOM Refs ---
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const authContainer = document.getElementById('auth-container');
+    const authForm = document.getElementById('auth-form');
+    const authTitle = document.getElementById('auth-title');
+    const authEmailInput = document.getElementById('auth-email');
+    const authPasswordInput = document.getElementById('auth-password');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const googleSignInBtn = document.getElementById('google-signin-btn');
+    const authLink = document.getElementById('auth-link');
+    const authLinkText = document.getElementById('auth-link-text');
+    const authError = document.getElementById('auth-error');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const form = document.getElementById('add-form');
+    const nameInput = document.getElementById('name');
+    const amountInput = document.getElementById('amount');
+    const typeInput = document.getElementById('type');
+    const dateInput = document.getElementById('date');
+    const transactionList = document.getElementById('transaction-list');
+    const filterNameInput = document.getElementById('filter-name');
+    const filterBySelect = document.getElementById('filter-by');
+    const sortBySelect = document.getElementById('sort-by');
+    const sortOrderBtn = document.getElementById('sort-order-btn');
+    const totalSpendEl = document.getElementById('total-spend');
+    const totalTransactionsEl = document.getElementById('total-transactions');
+    const avgTransactionEl = document.getElementById('avg-transaction');
+    const clockEl = document.getElementById('clock');
+    const backBtn = document.getElementById('back-btn');
+    const historyTitle = document.getElementById('history-title');
+    const userIdDisplayEl = document.getElementById('user-id-display');
+
+    // --- UI Helpers ---
+    let sortOrder = 'desc';
+    let selectedName = null;
+
+    const formatCurrency = (amount) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount || 0);
+    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const updateFilterPlaceholder = () => {
+      const selectedOption = filterBySelect.options[filterBySelect.selectedIndex];
+      filterNameInput.placeholder = `Search by ${selectedOption.text.toLowerCase().replace('filter by ', '')}...`;
+    };
+
+    const handleAuthError = (error) => {
+      let message = 'An unknown error occurred.';
+      switch (error?.code) {
+        case 'auth/invalid-email':
+          message = 'The email address is not valid.'; break;
+        case 'auth/user-disabled':
+          message = 'This user has been disabled.'; break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          message = 'Invalid email or password.'; break;
+        case 'auth/email-already-in-use':
+          message = 'This email is already in use.'; break;
+        case 'auth/weak-password':
+          message = 'Password should be at least 6 characters.'; break;
+        case 'auth/popup-closed-by-user':
+          message = 'Google sign-in popup closed. Try again.'; break;
+        default:
+          message = error?.message || message;
       }
-    });
+      authError.textContent = message;
+      console.error('Authentication error:', error);
+    };
 
-    // Google Sign-in
-    googleSigninBtn.addEventListener("click", async () => {
-      const provider = new GoogleAuthProvider();
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        authError.textContent = error.message;
-      }
-    });
-
-    // Log out
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-    });
-
-    // Show/hide UI based on auth
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authContainer.style.display = "none";
-        dashboardContainer.style.display = "flex";
-        setupTransactions(user);
+    const toggleAuthMode = () => {
+      isSignUpMode = !isSignUpMode;
+      if (isSignUpMode) {
+        authTitle.textContent = 'Sign up for a new account';
+        authSubmitBtn.textContent = 'Sign Up';
+        authLinkText.textContent = 'Already have an account?';
+        authLink.textContent = 'Log In';
       } else {
-        authContainer.style.display = "flex";
-        dashboardContainer.style.display = "none";
+        authTitle.textContent = 'Log in to your Dashboard';
+        authSubmitBtn.textContent = 'Log In';
+        authLinkText.textContent = "Don't have an account?";
+        authLink.textContent = 'Sign Up';
       }
-    });
+      authError.textContent = '';
+    };
 
-    // Dashboard elements
-    const addForm = document.getElementById("add-form");
-    const transactionList = document.getElementById("transaction-list");
-    const totalSpendEl = document.getElementById("total-spend");
-    const totalTransactionsEl = document.getElementById("total-transactions");
-    const avgTransactionEl = document.getElementById("avg-transaction");
-    const searchInput = document.getElementById("search");
-    const filterType = document.getElementById("filter-type");
-    const sortOrderBtn = document.getElementById("sort-order-btn");
-    const historyTitle = document.getElementById("history-title");
-    const backBtn = document.getElementById("back-btn");
+    const updateClock = () => {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      clockEl.textContent = now.toLocaleDateString('en-IN', options);
+    };
 
-    let sortDesc = true;
-    let unsubscribe = null;
-    let transactions = [];
+    const updateSummary = (transactionsToDisplay) => {
+      const totalSpend = transactionsToDisplay.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+      const transactionCount = transactionsToDisplay.length;
+      const avgTransaction = transactionCount > 0 ? totalSpend / transactionCount : 0;
+      totalSpendEl.textContent = formatCurrency(totalSpend);
+      totalTransactionsEl.textContent = transactionCount;
+      avgTransactionEl.textContent = formatCurrency(avgTransaction);
+    };
 
-    function formatCurrency(value) {
-      return new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        minimumFractionDigits: 2,
-      }).format(value);
-    }
+    const renderTransactions = () => {
+      transactionList.innerHTML = '';
+      let transactionsToDisplay = [...allTransactions];
 
-    function formatDate(ts) {
-      if (!ts) return "";
-      const date = ts.toDate ? ts.toDate() : new Date(ts);
-      return date.toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    }
+      const filterValue = filterNameInput.value.toLowerCase().trim();
+      const filterBy = filterBySelect.value;
 
-    function renderTransactions() {
-      const searchVal = searchInput.value.toLowerCase();
-      const filterVal = filterType.value;
-
-      let filtered = transactions.filter((t) => {
-        const matchesSearch =
-          t.name.toLowerCase().includes(searchVal) ||
-          (t.type && t.type.toLowerCase().includes(searchVal));
-        const matchesFilter = filterVal === "all" || t.type === filterVal;
-        return matchesSearch && matchesFilter;
-      });
-
-      if (!sortDesc) {
-        filtered = filtered.slice().reverse();
+      if (selectedName) {
+        transactionsToDisplay = transactionsToDisplay.filter((t) => t.name === selectedName);
       }
 
-      transactionList.innerHTML = "";
-      if (filtered.length === 0) {
-        transactionList.innerHTML = `<tr class="empty-row"><td colspan="4">No transactions found</td></tr>`;
-        return;
-      }
-
-      filtered.forEach((t) => {
-        const row = document.createElement("tr");
-        row.classList.add("new-row");
-        row.innerHTML = `
-          <td class="clickable-name" data-name="${t.name}" data-label="Name">${t.name}</td>
-          <td data-label="Amount">${formatCurrency(Number(t.amount) || 0)}</td>
-          <td data-label="Type">${t.type}</td>
-          <td data-label="Date">${formatDate(t.date)}</td>
-        `;
-        row.querySelector(".clickable-name").addEventListener("click", () => {
-          showPersonHistory(t.name);
+      if (filterValue) {
+        transactionsToDisplay = transactionsToDisplay.filter((t) => {
+          let value;
+          if (filterBy === 'amount') value = String(t.amount ?? '');
+          else if (filterBy === 'date') value = String(t.date ?? '');
+          else value = String(t[filterBy] ?? '').toLowerCase();
+          return value.includes(filterValue);
         });
-        transactionList.appendChild(row);
-      });
-    }
-
-    function updateSummary() {
-      if (transactions.length === 0) {
-        totalSpendEl.textContent = "₹0.00";
-        totalTransactionsEl.textContent = "0";
-        avgTransactionEl.textContent = "₹0.00";
-        return;
       }
-      const total = transactions.reduce((acc, t) => acc + (Number(t.amount) || 0), 0);
-      const avg = total / transactions.length;
-      totalSpendEl.textContent = formatCurrency(total);
-      totalTransactionsEl.textContent = transactions.length;
-      avgTransactionEl.textContent = formatCurrency(avg);
-    }
 
-    function setupTransactions(user) {
-      if (unsubscribe) unsubscribe();
-      const q = query(collection(db, "users", user.uid, "transactions"), orderBy("createdAt", "desc"));
-      unsubscribe = onSnapshot(q, (snapshot) => {
-        transactions = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        renderTransactions();
-        updateSummary();
-      });
-    }
-
-    addForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) return;
-
-      const name = document.getElementById("name").value.trim();
-      const amount = parseFloat(document.getElementById("amount").value);
-      const type = document.getElementById("type").value;
-      const date = document.getElementById("date").value ? new Date(document.getElementById("date").value) : new Date();
-
-      if (!name || isNaN(amount) || !type) return;
-
-      await addDoc(collection(db, "users", user.uid, "transactions"), {
-        name,
-        amount,
-        type,
-        date,
-        createdAt: serverTimestamp(),
+      // Sort
+      const sortKey = sortBySelect.value;
+      transactionsToDisplay.sort((a, b) => {
+        let valA = a[sortKey];
+        let valB = b[sortKey];
+        if (sortKey === 'amount') { valA = Number(valA) || 0; valB = Number(valB) || 0; }
+        if (sortKey === 'date') { valA = new Date(valA || 0).getTime(); valB = new Date(valB || 0).getTime(); }
+        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+        return 0;
       });
 
-      addForm.reset();
-    });
-
-    searchInput.addEventListener("input", renderTransactions);
-    filterType.addEventListener("change", renderTransactions);
-    sortOrderBtn.addEventListener("click", () => {
-      sortDesc = !sortDesc;
-      sortOrderBtn.textContent = sortDesc ? "⬆ Date" : "⬇ Date";
-      renderTransactions();
-    });
-
-    function showPersonHistory(personName) {
-      const filtered = transactions.filter((t) => t.name === personName);
-      transactionList.innerHTML = "";
-      if (filtered.length === 0) {
-        transactionList.innerHTML = `<tr class="empty-row"><td colspan="4">No transactions found for ${personName}</td></tr>`;
+      if (transactionsToDisplay.length === 0) {
+        const row = document.createElement('tr');
+        row.classList.add('empty-row');
+        row.innerHTML = `<td colspan="4">No transactions found.</td>`;
+        transactionList.appendChild(row);
       } else {
-        filtered.forEach((t) => {
-          const row = document.createElement("tr");
-          row.classList.add("new-row");
+        for (const t of transactionsToDisplay) {
+          const row = document.createElement('tr');
+          row.classList.add('new-row');
           row.innerHTML = `
-            <td data-label="Name">${t.name}</td>
+            <td class="clickable-name" data-name="${t.name}" data-label="Name">${t.name}</td>
             <td data-label="Amount">${formatCurrency(Number(t.amount) || 0)}</td>
             <td data-label="Type">${t.type}</td>
             <td data-label="Date">${formatDate(t.date)}</td>
           `;
           transactionList.appendChild(row);
-        });
+        }
       }
-      historyTitle.textContent = `${personName}'s History`;
-      backBtn.classList.remove("hidden");
-    }
 
-    backBtn.addEventListener("click", () => {
-      historyTitle.textContent = "Transaction History";
-      backBtn.classList.add("hidden");
+      updateSummary(transactionsToDisplay);
+    };
+
+    const listenForTransactions = () => {
+      // Per-user subcollection under an app grouping (matches your original structure)
+      const colRef = collection(db, `artifacts/${appId}/users/${userId}/transactions`);
+      const qRef = query(colRef, orderBy('createdAt', 'desc'));
+      onSnapshot(
+        qRef,
+        (snapshot) => {
+          allTransactions = [];
+          snapshot.forEach((doc) => allTransactions.push(doc.data()));
+          renderTransactions();
+        },
+        (error) => {
+          console.error('Error fetching documents: ', error);
+          transactionList.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--muted); padding: 2rem;">Error: Could not load transactions.</td></tr>`;
+        }
+      );
+    };
+
+    const enterDetailsView = (name) => {
+      selectedName = name;
+      historyTitle.textContent = `History for: ${name}`;
+      backBtn.classList.remove('hidden');
+      filterNameInput.value = '';
+      filterBySelect.value = 'name';
+      updateFilterPlaceholder();
       renderTransactions();
+    };
+
+    const exitDetailsView = () => {
+      selectedName = null;
+      historyTitle.textContent = 'History';
+      backBtn.classList.add('hidden');
+      filterNameInput.value = '';
+      filterBySelect.value = 'name';
+      updateFilterPlaceholder();
+      renderTransactions();
+    };
+
+    const handleAddTransaction = async (e) => {
+      e.preventDefault();
+      if (!userId) { authError.textContent = 'Please log in first.'; return; }
+
+      const amountNum = Number(amountInput.value);
+      if (Number.isNaN(amountNum) || amountNum < 0) { authError.textContent = 'Please enter a valid non-negative amount.'; return; }
+
+      const newTransaction = {
+        name: nameInput.value.trim(),
+        amount: amountNum,
+        type: typeInput.value,
+        date: dateInput.value,
+        createdAt: Date.now(), // client timestamp for sorting
+      };
+
+      try {
+        await addDoc(collection(db, `artifacts/${appId}/users/${userId}/transactions`), newTransaction);
+        form.reset();
+        dateInput.valueAsDate = new Date();
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        authError.textContent = 'Failed to add transaction. Check console.';
+      }
+    };
+
+    const toggleSortOrder = () => {
+      sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+      sortOrderBtn.textContent = sortOrder === 'desc' ? 'Desc ⬇️' : 'Asc ⬆️';
+      renderTransactions();
+    };
+
+    const handleAuthForm = async (e) => {
+      e.preventDefault();
+      const email = authEmailInput.value.trim();
+      const password = authPasswordInput.value;
+      authError.textContent = '';
+      try {
+        if (isSignUpMode) await createUserWithEmailAndPassword(auth, email, password);
+        else await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) { handleAuthError(error); }
+    };
+
+    const handleGoogleSignIn = async () => {
+      const provider = new GoogleAuthProvider();
+      try { await signInWithPopup(auth, provider); }
+      catch (error) { handleAuthError(error); }
+    };
+
+    const handleLogout = async () => { try { await signOut(auth); } catch (error) { console.error('Logout failed:', error); } };
+
+    // --- Auth state listener ---
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        userId = user.uid;
+        dashboardContainer.style.display = 'flex';
+        authContainer.style.display = 'none';
+        userIdDisplayEl.textContent = `User ID: ${userId}`;
+        listenForTransactions();
+      } else {
+        userId = null;
+        dashboardContainer.style.display = 'none';
+        authContainer.style.display = 'grid';
+        userIdDisplayEl.textContent = '';
+        transactionList.innerHTML = `<tr><td colspan=\"4\" style=\"text-align:center; color: var(--muted); padding: 2rem;\">Sign in to load your transactions.</td></tr>`;
+      }
     });
 
-    // Clock
-    function updateClock() {
-      const now = new Date();
-      document.getElementById("clock").textContent = now.toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
+    // --- Event Listeners ---
+    authForm.addEventListener('submit', handleAuthForm);
+    authLink.addEventListener('click', toggleAuthMode);
+    googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+    logoutBtn.addEventListener('click', handleLogout);
+
+    form.addEventListener('submit', handleAddTransaction);
+    filterNameInput.addEventListener('input', renderTransactions);
+    filterBySelect.addEventListener('change', () => { updateFilterPlaceholder(); renderTransactions(); });
+    sortBySelect.addEventListener('change', renderTransactions);
+    sortOrderBtn.addEventListener('click', toggleSortOrder);
+    backBtn.addEventListener('click', exitDetailsView);
+    transactionList.addEventListener('click', (e) => { if (e.target.classList.contains('clickable-name')) enterDetailsView(e.target.dataset.name); });
+
+    // --- Initial Load ---
+    dateInput.valueAsDate = new Date();
     updateClock();
+    setInterval(updateClock, 1000);
+    updateFilterPlaceholder();
   </script>
 </body>
 </html>
